@@ -1,0 +1,25 @@
+# Collection-root hygiene.
+#
+# This repository is public. The author's own research material is private and
+# lives outside it, so nothing from the paths below may be copied, exported, or
+# committed here, and nothing inside a sibling submodule's `.research-rag`
+# state or bundle output may be added to the collection:
+#
+#   /mnt/DATA/projects/ai-and-fetishism     private research corpus and drafts
+#   /mnt/DATA/projects/racism-and-borders   private drafts, notes, and sources
+#   /mnt/DATA/obsidian-vault                personal notes vault
+#   /mnt/DATA/zettlr                        personal writing notes
+#   /mnt/DATA/agent-skills                  personal agent skills
+#   /mnt/DATA/mcp-server-white-box-synthesis  separate local project
+#   /mnt/DATA/draft-writing (2).zip         personal draft archive
+#
+# The patterns are the defensive half of that rule, for the parent work tree
+# only. Each submodule repeats the same rules in its own `.gitignore`, which is
+# where they actually apply.
+**/.research-rag/
+**/*.research-rag.zip
+**/*.research-rag.zip.sha256
+**/evaluation/*-report.json
+mcp_settings.json
+*.pdf
+*.epub
