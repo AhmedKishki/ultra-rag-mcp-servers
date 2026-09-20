@@ -30,15 +30,15 @@ This README is the collection-level comparison and selection guide. Each
 server's own README is a standalone user manual for that server and does not
 compare it with the other projects in this collection.
 
-| Server | Use it when you need |
-|---|---|
-| [`vanilla-ultra-rag-mcp-server`](vanilla-ultra-rag-mcp-server/) | UltraRAG's existing Vanilla RAG stages—retrieval, RAG prompt, generation, extraction, and evaluation—with minimal gateway code and no UltraRAG source modifications. |
-| [`research-ultra-rag-mcp-server`](research-ultra-rag-mcp-server/) | A research adaptation with project-isolated PDF/EPUB ingestion, UltraRAG BM25 + project-local dense hybrid retrieval (an exact scan by default, embedded ANN above a documented corpus threshold), optional CPU reranking, metadata, provenance, locators, reversible source exclusions, relocatable derived state, and a local evidence UI; the connected agent generates from returned evidence. |
-| [`memory-ultra-rag-mcp-server`](memory-ultra-rag-mcp-server/) | A planned project-scoped semantic memory server with an explicit global-memory shard, typed records, contradiction review, bounded relations, hybrid retrieval, and controlled pruning. The submodule currently contains its design plan only. |
+| Server | What it is | Pick it when |
+|---|---|---|
+| [`vanilla-ultra-rag-mcp-server`](vanilla-ultra-rag-mcp-server/) | A thin gateway exposing UltraRAG's own Vanilla RAG stages: retrieval, RAG prompt, generation, extraction, and evaluation. | You want UltraRAG itself, unmodified, behind an MCP interface. |
+| [`research-ultra-rag-mcp-server`](research-ultra-rag-mcp-server/) | A research knowledge base over your own PDF and EPUB collection: isolated per project, hybrid BM25 plus dense retrieval, metadata, provenance, original-file locators, reversible source exclusions, reviewable metadata, and a local evidence UI. | You need to find and cite evidence in a document collection, at the scale of tens to low hundreds of sources on a CPU. |
+| [`memory-ultra-rag-mcp-server`](memory-ultra-rag-mcp-server/) | A planned project-scoped semantic memory server with an explicit shared-memory shard, typed records, contradiction review, bounded relations, and controlled pruning. The submodule currently holds its design plan only. | You want durable working memory for agents rather than document retrieval. Not implemented yet. |
 
-The servers remain independently installable and versioned. Follow the README
-inside the selected submodule for installation, MCP client configuration, and
-usage instructions.
+The servers are independently installable and versioned. Follow the README
+inside the submodule you pick for installation, MCP client configuration, and
+usage.
 
 ## Shared local interface
 

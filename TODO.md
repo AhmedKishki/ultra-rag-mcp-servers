@@ -1,57 +1,77 @@
-# TODO
+# TODO — servers that do not exist yet
 
-## `embedded-c-ultra-rag-mcp-server`
+This file holds concepts for MCP servers that have *not* been built. A server is
+listed in the collection `README.md` only once its repository exists, so
+everything here is a design sketch rather than something you can install.
 
-Status: design agreed; implementation deferred until explicitly requested.
+Both entries share the same rules, which come from this collection's
+`AGENTS.md`:
 
-- Create an independent, project-scoped stdio MCP server for embedded C
-  development.
-- Use technical documentation and explicitly selected C reference code as its
-  knowledge base; never execute ingested code.
-- Initially support manuals, user guides, datasheets, HTML/Markdown reference
-  documentation, and C source/header files.
-- Treat vendor, product, document revision, protocol, language, and source type
-  as filterable metadata.
-- Treat registers, register fields, addresses or offsets, bit ranges, reset
-  values, access modes, commands, constants, macros, and C symbols as structured
-  entities tied to exact source evidence.
-- Preserve PDF page/section/table locators and C file/line/symbol locators.
-- Combine exact entity lookup, UltraRAG BM25, local Qdrant dense retrieval, and
-  reciprocal-rank fusion; default to CPU-only operation with a future GPU path.
-- Store generated state under each project's `.ultrarag/code/` directory and
-  prevent cross-project retrieval.
-- Expose focused tools for status, ingestion, search, register lookup, symbol
+- Each server is independently installable and self-contained: its own README,
+  its own tests, its own storage, its own release history.
+- No server may depend on a sibling server or read its private state.
+- Deferred state lives in the project's own directory, and nothing crosses
+  project boundaries.
+- UltraRAG stays unmodified. Any adaptation lives in the new server, not in the
+  upstream source tree.
+
+---
+
+## Embedded C development server
+
+**Status:** design agreed, implementation deferred until it is explicitly asked
+for.
+
+**What it would be.** A project-scoped knowledge base for embedded C work: chip
+manuals, user guides, datasheets, HTML or Markdown reference documentation, and
+hand-picked C reference code. It would never execute ingested code.
+
+**What makes it different from the research server.** Registers, bit fields,
+addresses, reset values, access modes, commands, macros, and C symbols are
+first-class entities with exact source evidence, not just text to search. Exact
+entity lookup is combined with lexical and dense retrieval.
+
+**Key requirements**
+
+- Support PDFs and reference documentation, plus C sources and headers.
+- Keep locators all the way back: page, section, or table for documents; file,
+  line, and symbol for code.
+- Make vendor, product, document revision, protocol, language, and source type
+  filterable metadata.
+- Keep state under each project's own directory and prevent cross-project
+  retrieval.
+- Expose focused tools: status, ingestion, search, register lookup, symbol
   lookup, evidence retrieval, source listing, and reviewed metadata.
-- Keep UltraRAG unmodified and pin a verified upstream revision directly.
-- Give the project a standalone user README and agent guidance. Add comparison
-  text only to this collection after the server exists.
+- Default to CPU-only operation, with a GPU path as future work.
+- Ship a standalone README and agent guidance of its own; comparison text
+  belongs in the collection README only after the server exists.
 
-## `memory-ultra-rag-mcp-server`
+---
 
-Status: concept agreed; detailed design and implementation deferred until
-explicitly requested.
+## Memory server
 
-- Create an independent, project-scoped stdio MCP server for durable human and
-  agent working memory.
+**Status:** concept agreed, detailed design and implementation deferred until it
+is explicitly asked for.
+
+**What it would be.** Durable working memory for a person and their agents:
+notes, interpretations, decisions, open questions, and project terminology —
+distinct from the transient conversation context a client holds.
+
+**Key requirements**
+
 - First evaluate UltraRAG's existing memory server and expose its unmodified
-  behavior where it already satisfies the contract. Keep any necessary adapter
-  code outside the UltraRAG source tree.
-- Do not depend on `research-ultra-rag-mcp-server`, its tools, or its private
-  storage. The memory server must install and operate on its own.
-- Store all derived state beneath each project's `.ultrarag/memory/` directory
-  and prevent implicit cross-project retrieval.
-- Distinguish durable notes, interpretations, decisions, open questions, and
-  project terminology from transient client-owned conversation context.
-- Require an explicit MCP write call before anything becomes durable; never
-  save ordinary conversations silently.
-- Record author or origin, creation and edit times, memory type, tags, and any
+  behaviour where it already fits; keep any adapter outside the upstream tree.
+- Require an explicit write call before anything becomes durable. Nothing is
+  saved silently.
+- Record origin or author, creation and edit times, memory type, tags, and any
   user-supplied evidence references.
-- Treat evidence references as provenance links, not as proof that a memory is
-  a source. Never present or cite remembered text as PDF/EPUB evidence.
-- Expose focused tools for status, create, search, list, retrieve, update, and
-  delete operations. Make deletion and editing transparent to the user.
-- Default to CPU-only local retrieval and avoid a required external database
-  service. Decide lexical, dense, or hybrid retrieval only after evaluation.
-- Give the repository its own user README, agent guide, engineering contract,
-  storage documentation, tests, and versioning before adding it to this
-  collection's README.
+- Treat an evidence reference as a provenance link, never as proof that the
+  memory is a source. Remembered text must never be presented as document
+  evidence.
+- Expose tools for status, create, search, list, retrieve, update, and delete,
+  with deletion and editing visible to the user.
+- Default to CPU-only local retrieval with no required external database, and
+  decide between lexical, dense, and hybrid retrieval only after evaluation.
+- Do not depend on the research server, its tools, or its private storage.
+- Ship a user README, agent guide, engineering contract, storage documentation,
+  tests, and versioning before it appears in the collection README.
