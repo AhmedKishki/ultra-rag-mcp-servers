@@ -22,7 +22,7 @@ The servers are independently installable and versioned. Follow the README insid
 
 ## Shared local interface
 
-[`ui-ultra-rag-mcp`](ui-ultra-rag-mcp/) contains the basic local evidence workspace, loopback HTTP host, request safety checks, and adapter contract. It is a library, not an MCP server and not a knowledge base. A server can pin it as a dependency and retain only a thin adapter for its own tools and project policy. The research server currently uses it; future document-oriented servers can reuse it without sharing indexes or project data.
+[`ui-ultra-rag-mcp`](ui-ultra-rag-mcp/) contains the basic local evidence workspace, loopback HTTP host, request safety checks, and adapter contract, including opt-in source-selection and category-partition filters for servers that support them. It is a library, not an MCP server and not a knowledge base. A server can pin it as a dependency and retain only a thin adapter for its own tools and project policy. The research server currently uses it; future document-oriented servers can reuse it without sharing indexes or project data.
 
 ## Clone the complete collection
 
