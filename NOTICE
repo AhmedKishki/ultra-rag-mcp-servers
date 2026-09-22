@@ -1,15 +1,12 @@
 UPSTREAM ATTRIBUTION
 
-rag-mcp-servers is a collection of independent MCP server projects built on
-UltraRAG plus a reusable companion UI library:
+rag-mcp-servers is a collection of independent MCP server projects built on UltraRAG plus a reusable companion UI library:
 
     UltraRAG
     https://github.com/OpenBMB/UltraRAG
     https://ultrarag.openbmb.cn/
 
-UltraRAG's upstream README identifies it as a joint project of THUNLP at
-Tsinghua University, NEUIR at Northeastern University, OpenBMB, and AI9stars,
-together with the wider UltraRAG contributor community:
+UltraRAG's upstream README identifies it as a joint project of THUNLP at Tsinghua University, NEUIR at Northeastern University, OpenBMB, and AI9stars, together with the wider UltraRAG contributor community:
 
     https://nlp.csai.tsinghua.edu.cn/
     https://neuir.github.io/
@@ -17,22 +14,13 @@ together with the wider UltraRAG contributor community:
     https://github.com/AI9Stars
     https://github.com/OpenBMB/UltraRAG/graphs/contributors
 
-UltraRAG supplies the MCP architecture, tools, prompts, pipeline design,
-chunking, indexing, and retrieval foundations used by the projects collected
-here. UltraRAG is distributed under the Apache License, Version 2.0, and its
-license contains the notice "Copyright 2023 OpenBMB":
+UltraRAG supplies the MCP architecture, tools, prompts, pipeline design, chunking, indexing, and retrieval foundations used by the projects collected here. UltraRAG is distributed under the Apache License, Version 2.0, and its license contains the notice "Copyright 2023 OpenBMB":
 
     https://github.com/OpenBMB/UltraRAG/blob/main/LICENSE.txt
     https://www.apache.org/licenses/LICENSE-2.0
 
-Each server submodule contains a version-specific NOTICE identifying the exact
-UltraRAG revision on which it depends and a suggested software citation. The
-UI submodule contains its own ecosystem acknowledgement and does not bundle an
-UltraRAG runtime.
+Each server submodule contains a version-specific NOTICE identifying the exact UltraRAG revision on which it depends and a suggested software citation. The UI submodule contains its own ecosystem acknowledgement and does not bundle an UltraRAG runtime.
 
 INDEPENDENT PROJECT NOTICE
 
-This collection and its subprojects are not official UltraRAG releases and are
-not affiliated with or endorsed by OpenBMB, THUNLP, NEUIR, AI9stars, or the
-UltraRAG contributors. The UltraRAG name is used only to identify the upstream
-software on which these projects depend.
+This collection and its subprojects are not official UltraRAG releases and are not affiliated with or endorsed by OpenBMB, THUNLP, NEUIR, AI9stars, or the UltraRAG contributors. The UltraRAG name is used only to identify the upstream software on which these projects depend.
