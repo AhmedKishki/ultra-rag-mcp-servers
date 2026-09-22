@@ -7,6 +7,9 @@
 [submodule "ui-ultra-rag-mcp"]
 	path = ui-ultra-rag-mcp
 	url = https://github.com/AhmedKishki/ui-ultra-rag-mcp.git
+[submodule "graph-memory-ultra-rag-mcp-server"]
+	path = graph-memory-ultra-rag-mcp-server
+	url = https://github.com/AhmedKishki/graph-memory-ultra-rag-mcp-server.git
 [submodule "memory-ultra-rag-mcp-server"]
 	path = memory-ultra-rag-mcp-server
 	url = https://github.com/AhmedKishki/memory-ultra-rag-mcp-server.git
