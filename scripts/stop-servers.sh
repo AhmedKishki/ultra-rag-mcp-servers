@@ -158,6 +158,12 @@ if [ -n "$PROJECT" ]; then
   for pid in "${CANDIDATES[@]}"; do
     belongs_to_project "$pid" && KEEP+=("$pid")
   done
+  # The roots themselves are the servers that name the project, and the walk
+  # above only reaches their descendants, so add them without duplicating a
+  # server that is both a root and a descendant of another root.
+  for pid in "${ROOTS[@]}"; do
+    in_keep "$pid" || KEEP+=("$pid")
+  done
 else
   for pid in "${CANDIDATES[@]}"; do KEEP+=("$pid"); done
 fi
