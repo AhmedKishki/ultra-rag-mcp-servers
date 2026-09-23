@@ -60,3 +60,18 @@ git push
 ```
 
 Use the equivalent commands for another server when updating its pinned revision. Update `ui-ultra-rag-mcp` in its own repository first when changing the shared interface, then update every tested consumer's dependency pin before recording the submodule pointers here.
+
+## Stop stray server processes
+
+A stdio MCP server belongs to the client that started it, so it cannot be reloaded or stopped from here: the client owns that process. Each server in turn owns a vanilla UltraRAG gateway and, through it, UltraRAG's corpus and retriever children, and every stdio child is started in its own session, so a process-group kill from a launcher cannot reach it. A client that reloads its servers can therefore leave a whole family behind.
+
+`scripts/stop-servers.sh` identifies those processes by their own entry points, walks each family from its server down to the UltraRAG children, and stops them by explicit PID — `SIGTERM` first, `SIGKILL` only for what ignores it. It never uses a pattern kill.
+
+```bash
+scripts/stop-servers.sh --dry-run            # list what it would stop
+scripts/stop-servers.sh                      # stop every family it recognises
+scripts/stop-servers.sh --project /path/to/project
+scripts/stop-servers.sh --timeout 30         # seconds to wait before SIGKILL
+```
+
+It reports each process with its role (`ui`, `server`, `gateway`, `ultrarag`, `verify`) and its depth below the server that owns it, and it exits non-zero if anything survived. Stopping a server is not the same as restarting it: the client owns that process, so bring it back from your MCP client, and a browser UI the server hosts on `--ui-port` returns with it.

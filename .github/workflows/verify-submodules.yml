@@ -24,3 +24,9 @@ jobs:
           test -f vanilla-ultra-rag-mcp-server/README.md
           test -f research-ultra-rag-mcp-server/pyproject.toml
           test -f research-ultra-rag-mcp-server/README.md
+
+      - name: Check the collection scripts
+        shell: bash
+        run: |
+          bash -n scripts/stop-servers.sh
+          scripts/stop-servers.sh --dry-run
