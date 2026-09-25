@@ -10,6 +10,7 @@ This is a collection repository. Its MCP server implementations and shared UI li
 
 ## Working rules
 
+- Write every file — documents, commit messages, code comments — in direct, concise language: one sentence per fact, no filler, no selling, and never restate a title as its own first sentence.
 - Retain the prominent UltraRAG acknowledgement in `README.md`, the root `NOTICE`, upstream project links, license information, and independent-project disclaimer. Do not imply upstream endorsement.
 - Read the selected submodule's own `AGENTS.md` before changing its code.
 - Make, test, commit, and push implementation changes inside the child repository first.
