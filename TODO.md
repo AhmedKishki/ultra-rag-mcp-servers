@@ -17,7 +17,7 @@ Every entry here follows the same rules, which come from this collection's `AGEN
 
 **What it would be.** A project-scoped knowledge base for embedded C work: chip manuals, user guides, datasheets, HTML or Markdown reference documentation, and hand-picked C reference code. It would never execute ingested code.
 
-**What makes it different from the research server.** Registers, bit fields, addresses, reset values, access modes, commands, macros, and C symbols are first-class entities with exact source evidence, not just text to search. Exact entity lookup is combined with lexical and dense retrieval.
+**What makes it different from the research server.** Registers, bit fields, addresses, reset values, access modes, commands, macros, and C symbols are first-class entities with exact source evidence rather than text to search. Exact entity lookup is combined with lexical and dense retrieval.
 
 **Key requirements**
 
