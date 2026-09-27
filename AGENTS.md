@@ -5,7 +5,6 @@ This is a collection repository. Its MCP server implementations and shared UI li
 - `vanilla-ultra-rag-mcp-server/`
 - `research-ultra-rag-mcp-server/`
 - `memory-ultra-rag-mcp-server/`
-- `graph-memory-ultra-rag-mcp-server/` (parked)
 - `ui-ultra-rag-mcp/`
 
 ## Working rules
@@ -32,7 +31,6 @@ git submodule status --recursive
 git -C vanilla-ultra-rag-mcp-server status --short --branch
 git -C research-ultra-rag-mcp-server status --short --branch
 git -C memory-ultra-rag-mcp-server status --short --branch
-git -C graph-memory-ultra-rag-mcp-server status --short --branch
 git -C ui-ultra-rag-mcp status --short --branch
 git diff --check
 ```
