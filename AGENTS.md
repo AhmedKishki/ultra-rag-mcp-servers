@@ -5,7 +5,6 @@ This is a collection repository. Its MCP server implementations and shared UI li
 - `vanilla-ultra-rag-mcp-server/`
 - `research-ultra-rag-mcp-server/`
 - `memory-ultra-rag-mcp-server/`
-- `graph-memory-ultra-rag-mcp-server/` (parked)
 - `ui-ultra-rag-mcp/`
 
 ## Working rules
@@ -32,9 +31,8 @@ git submodule status --recursive
 git -C vanilla-ultra-rag-mcp-server status --short --branch
 git -C research-ultra-rag-mcp-server status --short --branch
 git -C memory-ultra-rag-mcp-server status --short --branch
-git -C graph-memory-ultra-rag-mcp-server status --short --branch
 git -C ui-ultra-rag-mcp status --short --branch
 git diff --check
 ```
 
-A leading `-` in `git submodule status` means a child is not initialized. A leading `+` means the checked-out child commit differs from the commit recorded by the parent.
+A leading `-` in `git submodule status` means a child is not initialized. A leading `+` means the checked-out child commit differs from the commit recorded by the parent. A submodule listed in `git submodule status` that is absent from this file was removed, and its entry in `.gitmodules` and its gitlink are gone with it.

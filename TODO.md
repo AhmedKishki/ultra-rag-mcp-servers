@@ -11,6 +11,16 @@ Every entry here follows the same rules, which come from this collection's `AGEN
 
 ---
 
+## Graph memory server
+
+**Status:** parked 2026-09-22, submodule removed, definition still being revised.
+
+**What it would be.** A project-scoped, strongly typed store for durable operational memory between agent sessions: objects, relations as addressable atoms, and atomic statements. It is the MCP reference memory server's model reimplemented in Python, extended with a project-declared type schema in `project-types.json` seeded with a canonical vocabulary, addressed relations, reversible withdrawal, admission control that refuses an exact duplicate and records a reasoned override, one global store per user, and promotion across that line behind an explicit `scope`.
+
+**Why it is not built.** The type system and the local/global boundary are the open questions, and the memory server already answers the simpler version of them. `memory-ultra-rag-mcp-server` is the collection's memory server until this one is settled.
+
+---
+
 ## Embedded C development server
 
 **Status:** design agreed, implementation deferred until it is explicitly asked for.
