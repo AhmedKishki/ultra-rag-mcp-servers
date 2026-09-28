@@ -17,6 +17,7 @@
 # only. Each submodule repeats the same rules in its own `.gitignore`, which is
 # where they actually apply.
 **/.research-rag/
+**/.memory-rag/
 **/*.research-rag.zip
 **/*.research-rag.zip.sha256
 **/evaluation/*-report.json
