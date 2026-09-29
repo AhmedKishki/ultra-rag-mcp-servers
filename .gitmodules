@@ -10,3 +10,6 @@
 [submodule "memory-ultra-rag-mcp-server"]
 	path = memory-ultra-rag-mcp-server
 	url = https://github.com/AhmedKishki/memory-ultra-rag-mcp-server.git
+[submodule "config-ultra-rag-mcp"]
+	path = config-ultra-rag-mcp
+	url = https://github.com/AhmedKishki/config-ultra-rag-mcp.git
