@@ -20,6 +20,7 @@ This is a collection repository. Its MCP server implementations and shared UI li
 - Keep cross-server comparisons and selection guidance in the parent `README.md`. Each child `README.md` must stand alone and document only that server.
 - Keep deferred, unimplemented server concepts in the collection-root `TODO.md`; list a server in `README.md` only after its repository has been created and included here. Child roadmaps may cover deferred work only within that child's existing role, not concepts for new servers.
 - Every server, including planned servers, must be an independently installable, self-contained project with its own README, agent guidance, storage boundary, tests, and release history. Do not make one specialized server depend on a sibling server or its private state.
+- Commit and push after every change, without waiting to be asked. A change that is not on its remote is a change that is lost, and it is this repository's only record. Push the child repository first, then the pointer here, in two commands rather than one batch at the end.
 - Do not edit `.gitmodules` casually; the canonical child remotes are the AhmedKishki GitHub repositories named above.
 
 ## Validation
