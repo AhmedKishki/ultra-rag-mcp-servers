@@ -13,3 +13,6 @@
 [submodule "config-ultra-rag-mcp"]
 	path = config-ultra-rag-mcp
 	url = https://github.com/AhmedKishki/config-ultra-rag-mcp.git
+[submodule "research-rag"]
+	path = research-rag
+	url = https://github.com/AhmedKishki/research-rag.git
