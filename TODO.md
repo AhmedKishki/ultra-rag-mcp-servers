@@ -6,6 +6,18 @@ Each entry follows the member rules in the collection's `AGENTS.md`, and that fi
 
 ---
 
+## Open collection work
+
+### One lifecycle for the app products
+
+- **Status:** `research-rag` has it; `memory-rag` does not; not started.
+- **What it is:** every app is served by the terminal that started it, nothing is left running that nobody is watching, the browser opens only when a reader asks for it, and the project is chosen inside the workspace rather than on the command line.
+- **How it is carried:** by copying, not by sharing. The shared library `ui-ultra-rag-mcp` declares the control and each product implements it in its own adapter, so one package owns the workspace and each product owns its lifecycle.
+- **Why it is not a shared dependency:** two app products depending on each other would make every change to one a change to the other, and a member may depend on a pinned sibling library or on nothing.
+- **The reference implementation:** `research-rag`, whose `AGENTS.md` states the lifecycle as a rule and whose `TODO.md` carries the command centre still to build.
+
+---
+
 ## Graph memory server
 
 - **Status:** the server is parked, its submodule is removed, and its definition is still being revised.
