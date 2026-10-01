@@ -16,3 +16,6 @@
 [submodule "research-rag"]
 	path = research-rag
 	url = https://github.com/AhmedKishki/research-rag.git
+[submodule "memory-rag"]
+	path = memory-rag
+	url = https://github.com/AhmedKishki/memory-rag.git

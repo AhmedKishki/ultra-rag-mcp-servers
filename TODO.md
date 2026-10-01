@@ -17,7 +17,7 @@ Every entry here follows the same rules, which come from this collection's `AGEN
 
 **What it would be.** A project-scoped, strongly typed store for durable operational memory between agent sessions: objects, relations as addressable atoms, and atomic statements. It is the MCP reference memory server's model reimplemented in Python, extended with a project-declared type schema in `project-types.json` seeded with a canonical vocabulary, addressed relations, reversible withdrawal, admission control that refuses an exact duplicate and records a reasoned override, one global store per user, and promotion across that line behind an explicit `scope`.
 
-**Why it is not built.** The type system and the local/global boundary are the open questions, and the memory server already answers the simpler version of them. `memory-ultra-rag-mcp-server` is the collection's memory server until this one is settled.
+**Why it is not built.** The type system and the local/global boundary are the open questions, and the memory app already answers the simpler version of them. `memory-rag` is the collection's memory product until this one is settled, and the server behind it is frozen, so a new memory concept starts here rather than in either of them.
 
 ---
 
