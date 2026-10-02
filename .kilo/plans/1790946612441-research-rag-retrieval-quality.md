@@ -1,5 +1,6 @@
 ---
-purpose: Specify local, fixed-model retrieval improvements and their evaluation on ai-and-fetishism.
+name: 1790946612441-research-rag-retrieval-quality.md
+description: Define isolated fixed-model retrieval experiments, valid measurements, and the evidence required before changing retrieval policy.
 ---
 
 # Fixed-model retrieval: evidence units, relevance, and redundancy
@@ -8,8 +9,9 @@ purpose: Specify local, fixed-model retrieval improvements and their evaluation 
 
 Keep the current BGE-small embedding model and MiniLM reranker, their revisions, and their weights.
 All inference stays local; no larger model, added neural model, hosted API, fine-tuning, or model download is in scope.
-The user requests an assessment and implementable recommendations, not source changes or live re-ingestion.
-Implement new policies as opt-in experiments only after implementation is authorized.
+- Repair the experiment harness and evaluation machinery, and reevaluate the experimental sequence.
+- Test candidate policies in disposable project/code copies.
+- Do not change shipped retrieval defaults or activate a live generation without a separate reviewed choice.
 Suppress copied text and overlapping evidence at search time, never during ingestion.
 Preserve independent arguments and contradictory claims; aggressive cross-source semantic collapsing is outside the selected design.
 
@@ -31,10 +33,15 @@ Keep CPU/offline operation and bounded inference; report the extra work each alg
 - Length floors and contextual embedding headers ship off; the corpus records ten embedding-truncated chunks.
 - Offline dense probes retrieve relevant sources for paraphrases but also rank an Atlas of AI index entry first for a conceptual supply-chain question.
 - Direct cached-model inference reproduces a stored canonical passage vector at cosine 1.0; probes are diagnostics, not a new judged end-to-end benchmark.
-- Existing evaluation is 32 known-item queries over 19 passages, single-annotator, with no held-out split or pooled relevance judgments.
+- The shipped evaluation contains 32 known-item queries over 19 target passages, with one designated relevant chunk per query.
+- Explicit exclusion of an unavailable source leaves 30 queries over 18 targets; record the excluded target and its reason with every derived input.
+- Target-family partitions of this inspected set are exploratory, not untouched confirmation sets.
+- Pooled relevance, passage usability, counterevidence, and no-answer judgments are absent.
 - The artifact/model audit starts no app and runs no ingestion or official benchmark.
 
-Source anchors: `retrieval/search.py:45-170,348-484,723-727,884-1082`; `retrieval/ultrarag.py:210-229`; `project/support.py:744-860`; `corpus/extraction.py:718-1013,1494-1775`; `core/tool_views.py:79-138`; `evaluation/README.md:5-27`, all beneath `research-rag/src/research_rag/` except the evaluation file.
+- Implementation owners: `research-rag/src/research_rag/retrieval/search.py`, `retrieval/ultrarag.py`, `project/support.py`, `corpus/extraction.py`, and `core/tool_views.py`.
+- Measurement contract: `research-rag/evaluation/README.md` and `research-rag/scripts/evaluate_retrieval.py`.
+- Experiment isolation and retained run records: the standalone `research-rag-experiments` repository.
 
 ## Score interpretation
 
@@ -47,18 +54,48 @@ Source anchors: `retrieval/search.py:45-170,348-484,723-727,884-1082`; `retrieva
 
 ## Ordered experimental work
 
+### Prerequisites for interpreting a run
+
+- A successful experiment preserves source bytes and records the observed algorithm, not only requested settings.
+  - Finalize source/engine guards and a failed or incomplete record after exceptions and interrupts.
+  - Retain each run's judged inputs, settings, patch, logs, reports, and content hashes under unique paths.
+  - Test dry-run followed by real run, repeated runs, malformed reports, and report replacement.
+  - Report unsupported or incomplete guards as unknown, not unchanged.
+  - Copies and guards provide cooperative isolation, not an operating-system security boundary against arbitrary code.
+- Candidate and rerank budgets require an observed-path check.
+  - Pin candidate minimum and maximum to 40/80/160 to request those branch depths at `top_k=10`.
+  - Set the rerank multiple/floor high enough for caps 20/30/50 to bind.
+  - Record actual candidate depths, pool sizes, scored windows, applied reranking, and fallback.
+  - Attribute pool shortfalls and budget exhaustion separately; a cap is not a measured window.
+- Diagnostics do not replace judgments.
+  - Ordered normalized-text equality preserves Unicode, order, multiplicity, numbers, operators, and signs.
+  - Missing text is missing coverage, not an empty duplicate passage.
+  - Lexical containment is an overlap diagnostic, not a semantic redundancy or contradiction label.
+  - Separate repeated results within a question family from repetition across distinct families.
+  - Measure candidates before and after repetition collapse; final-list duplication cannot establish rerank-budget waste or false suppression.
+- Current known-item runs establish passage findability on this benchmark only.
+  - Report paired outcomes by target family and treat multiple queries about one target as correlated.
+  - Do not select defaults from one-query changes or repeatedly inspected exploratory partitions.
+  - Keep a future authored confirmation set unused during policy development.
+  - Repeated latency runs require model warm-up, balanced execution order, and explicit cold/warm labels.
+
+### Evaluation and candidate policies
+
 1. **Make the measurement distinguish relevance, usability, and redundancy.**
    - Extend `scripts/evaluate_retrieval.py` without silently changing the existing known-item protocol.
    - Record effective settings, engine revision, generation, chunking/model fingerprints, candidate windows, gate rejections, collapsed alternatives, and final selection.
    - Keep private judgments and passage samples outside tracked source files and do not upload them to external evaluators.
-   - Add pooled, graded judgments for evidence spans identified by source-relative path, locator, and content, not frozen chunk IDs.
+    - Build a private annotation pool from baseline and candidate results plus known missed targets, identified by source-relative path, locator, and content.
+    - Have the author grade relevance and usability; do not invent human judgments from cosine, overlap, or result rank.
    - Label copied/reprinted evidence separately from related arguments, contradictions, and independent corroboration.
    - Add unusable fragments, full bibliography entries, headings, captions, short legitimate prose, no-answer questions, and user-authored paraphrases.
-   - Split development and held-out queries by target/question family so quote/paraphrase pairs cannot leak across splits.
+    - Split new development and untouched confirmation queries by target/question family; quote/paraphrase pairs stay together.
+    - Label partitions of the current inspected benchmark exploratory and declare only each partition's queried targets.
    - Preserve ambiguity refusal; unresolved or excluded targets require explicit adjudication, not silent skips.
    - Report candidate recall before/after gates, usable-passage precision, unique-evidence coverage, redundancy, false suppression, boundary integrity, and p50/p95 latency.
    - Plot cosine and rerank-score distributions for positives, hard negatives, and no-answer queries; do not infer confidence from per-query min-max scores.
-   - Reason: one designated chunk cannot fairly score re-chunking, equivalent passages, or deduplication.
+    - Keep this work open until relevance, usability, counterevidence, and no-answer judgments support the acceptance tests.
+    - Reason: one designated chunk cannot fairly score re-chunking, equivalent passages, or deduplication.
 
 2. **Prototype query-time quality and redundancy selection on unchanged artifacts.**
    - Work in `retrieval/search.py`, `project/support.py`, and the corresponding retrieval/core tests.
@@ -67,7 +104,9 @@ Source anchors: `retrieval/search.py:45-170,348-484,723-727,884-1082`; `retrieva
    - Compare retrieval depths 40/80/160 and rerank budgets 20/30/50; these are test settings, not new defaults.
    - Keep lexical-only and dense-only evidence represented inside the bounded rerank pool; log the branch contribution.
    - Widen after quality/exclusion/repetition losses and score new candidates within the total rerank budget; disclose ceiling and budget exhaustion separately.
-   - Group high-confidence same-text copies before spending the rerank budget, retaining every source/locator as an alternative.
+    - Group high-confidence same-text copies before spending the rerank budget, retaining every source/locator as an alternative.
+    - First measure how many scored candidates the existing post-rerank collapse discards and which target/evidence alternatives it removes.
+    - Do not reject this experiment because final result lists contain few duplicates; those lists already follow repetition collapse.
    - Preserve a representative that passes the query's filters and explicit exclusions; an excluded copy must not suppress an allowed copy.
    - Compare the source-only penalty with content-based MMR: `lambda * relevance - (1-lambda) * max_redundancy_to_selected`.
    - Combine body-vector similarity with word-shingle Jaccard/containment and known span overlap; exact shingle sets suffice for the bounded candidate pool.
@@ -122,8 +161,13 @@ Source anchors: `retrieval/search.py:45-170,348-484,723-727,884-1082`; `retrieva
 - Test PDF page continuations, multi-column boxes, EPUB nested anchors, abbreviation-heavy sentences, long-sentence fallback, complete references, truncation, and exact locator mapping.
 - Keep tests for explicit exclusions, reviewed metadata, offline restart, atomic generation activation, and real gateway hybrid retrieval.
 - Run the child validation commands and the official offline harness, with `--validate-only` first, on an approved test project; log every target-resolution failure.
-- Compare ablations at equal candidate/rerank budgets; retain source coverage and counterevidence alongside relevance metrics.
-- Accept an experiment only if held-out usable-evidence quality improves without hiding distinct claims or worsening no-answer behavior; report uncertainty and latency, not higher cosine as success.
+- Compare policy ablations at matched observed candidate/rerank budgets; label deliberate budget sweeps separately.
+- Record target presence at dense eligibility/admission, fusion, reranking, repetition collapse, and final selection.
+- Mark absence from a truncated diagnostic list unknown rather than treating it as a rejection.
+- Preserve ranking-metric definitions across report versions and refuse deltas across incompatible metric definitions.
+- Retain source coverage and adjudicated counterevidence alongside relevance metrics.
+- Accept a policy only if untouched confirmation judgments establish usable-evidence improvement without hiding distinct claims or worsening no-answer behavior.
+- Report paired uncertainty by target family and repeated latency; higher cosine, more sources, and less repetition alone are not success criteria.
 - Do not activate a new live generation or change shipped defaults without a separate reviewed choice; retain the old generation for rollback and report unmatched passage exclusions.
 - Additional annotators, a second corpus, production thresholds, aggressive cross-source collapse, new neural models, and live activation are outside this implementation commitment.
 
