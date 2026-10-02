@@ -1,13 +1,13 @@
 # AGENTS.md
 
-The working rules of this collection: what a change here has to be argued against, and what the frozen product means for the projects beside it.
+The working rules of this collection: what a change here has to be argued against, and what this repository owes the machines that already run what it holds.
 
 This is a collection repository. Its server implementations, its research app, and its shared libraries are Git submodules and independent projects:
 
 - `vanilla-ultra-rag-mcp-server/`
 - `research-rag/` — the form to install for the research knowledge base, and the only research product here
-- `memory-ultra-rag-mcp-server/` — frozen; see "The frozen memory server" below
-- `memory-rag/` — the form to install for the account's memory, and the only one of the two that changes
+- `memory-ultra-rag-mcp-server/`
+- `memory-rag/` — the form to install for the account's memory
 - `ui-ultra-rag-mcp/`
 - `config-ultra-rag-mcp/`
 
@@ -49,9 +49,9 @@ This is a collection repository. Its server implementations, its research app, a
 
 ### Where two memory products share state
 
-- `memory-rag` and the frozen `memory-ultra-rag-mcp-server` read and write the same memory directories.
+- `memory-rag` and `memory-ultra-rag-mcp-server` read and write the same memory directories.
   - The settings directory, the environment prefix, the model cache, and the scope directory names are shared deliberately.
-  - The frozen product holds no user dimension, and neither product adds one.
+  - The server holds no user dimension, and neither product adds one.
 
 ### How to record a change
 
@@ -63,21 +63,18 @@ This is a collection repository. Its server implementations, its research app, a
 - Do not edit `.gitmodules` casually.
   - The canonical child remotes are the AhmedKishki GitHub repositories named above.
 
-## The frozen memory server
+## What this repository may do with a member
 
-`memory-ultra-rag-mcp-server` is frozen: no change is made to it, and none is planned. It stays in this collection as a submodule because the machines that run it read and write the same memories the app reads and writes, so a memory those machines still hold is a memory the app must not make unreadable.
+This repository is the master repository for every project it holds. A member's code, tests, documentation, and releases are changed here, run here, and debugged here, and a member is added, retired, or archived as the work requires.
 
-- Never open a change, a branch, or a pull request against it.
-  - A fix a reader needs goes into `memory-rag`.
-- Never bump its pinned submodule commit.
-  - Its pointer is frozen at the revision that shipped, because moving it is a change to a product that is not changing.
-- Never rename anything the frozen product looks up by name: the account's settings directory, the `MEMORY_ULTRARAG_` environment prefix, the model cache, or the `memory/default` and `.memory-rag` directory names.
-  - A rename strands every existing memory and forces a silent model re-download, and the frozen product would keep writing the old path.
-  - `memory-rag`'s own `AGENTS.md` states each one as load-bearing and its tests fail if any moves.
-- Do not change `memory.sqlite3`'s schema to serve the app's own needs.
-  - The record is the statements, and the frozen product reads the same tables; a column it cannot read is a memory it cannot serve.
-  - `memory-rag`'s SQL panel writes statements and reindexes for exactly this reason.
-- A defect in it is fixed in `memory-rag`, and the fix is documented there rather than here.
+- No member is frozen, and no pointer is held at a revision for the sake of holding it.
+  - A product installed on a machine is a reason to keep it installable, not a reason the master repository may not change it.
+  - A defect in a member is fixed in that member, and the fix is pushed to that member's remote before the pointer here moves.
+- What binds is the state a live machine already holds.
+  - `memory-rag` and `memory-ultra-rag-mcp-server` read and write the same memory directories, so a change that would leave an existing memory unreadable is a change neither product may make.
+  - The account's settings directory, the `MEMORY_ULTRARAG_` environment prefix, the model cache, and the `memory/default` and `.memory-rag` directory names are found by name, and a rename strands every memory that exists under the old one.
+  - `memory.sqlite3`'s columns are read by both products, so a column one cannot read is a memory it cannot serve.
+  - `memory-rag`'s own `AGENTS.md` states each of those names as load-bearing, and its tests fail if any moves.
 
 ## Validation
 
@@ -88,12 +85,11 @@ git submodule status --recursive
 git -C vanilla-ultra-rag-mcp-server status --short --branch
 git -C research-rag status --short --branch
 git -C memory-rag status --short --branch
+git -C memory-ultra-rag-mcp-server status --short --branch
 git -C ui-ultra-rag-mcp status --short --branch
 git -C config-ultra-rag-mcp status --short --branch
 git diff --check
 ```
-
-The frozen server, `memory-ultra-rag-mcp-server`, is deliberately absent from that list: its checkout is expected to stay where it is, and `git submodule status` is the check that its pointer has not moved.
 
 Reading that output:
 
@@ -108,4 +104,4 @@ Before changing a child that serves a project, check whether the app is up for i
   - It answers that nothing is running without starting one.
 - `memory-rag` does the same for an account rather than a project, and it is one process for every project rather than one each.
   - `memory-rag clients` answers with its address and the agents attached to it.
-  - Its writes reach the same records the frozen server writes, so a hand edit made through the SQL panel is visible to a stdio client still running the frozen product, and the reverse.
+  - Its writes reach the same records the memory server writes, so a hand edit made through the SQL panel is visible to a stdio client still running the server, and the reverse.
