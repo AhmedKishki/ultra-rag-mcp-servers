@@ -2,14 +2,11 @@
 
 The working rules of this collection: what a change here has to be argued against, and what this repository owes the machines that already run what it holds.
 
-This is a collection repository. Its server implementations, its research app, and its shared libraries are Git submodules and independent projects:
+This is a collection repository. Its server implementations and its apps are Git submodules and independent projects:
 
-- `vanilla-ultra-rag-mcp-server/`
 - `research-rag/` — the form to install for the research knowledge base, and the only research product here
 - `memory-ultra-rag-mcp-server/`
 - `memory-rag/` — the form to install for the account's memory
-- `ui-ultra-rag-mcp/`
-- `config-ultra-rag-mcp/`
 
 ## Working rules
 
@@ -38,8 +35,10 @@ This is a collection repository. Its server implementations, its research app, a
 - Every server, including planned servers, must be an independently installable, self-contained project.
   - Its own README, agent guidance, storage boundary, tests, and release history.
   - Do not make one specialized server depend on a sibling server or its private state.
-- Treat `ui-ultra-rag-mcp` and `config-ultra-rag-mcp` as shared libraries, not as MCP servers.
-  - A repository may depend on a pinned commit through a thin adapter, but neither may read a project's private storage directly.
+- No member depends on another project of this collection's author to do its work.
+  - The workspace, the settings layer, and the vanilla gateway were shared libraries, and each app that needs one carries its own copy.
+  - Two copies of the workspace and the settings layer is duplication this repository accepts, because a pinned dependency is a fix this repository cannot make and cannot ship.
+  - A change that belongs in one member is made in that member, and where another member carries the same code it is carried there too.
 - `research-rag` is an app, not a collection member that is exempt from these rules.
   - It is a server product with a browser workspace and a command line beside its agent surface, and it holds the same obligations as every other member.
   - It has no dependency on a sibling's private state.
@@ -82,12 +81,9 @@ Before committing a collection change, run:
 
 ```bash
 git submodule status --recursive
-git -C vanilla-ultra-rag-mcp-server status --short --branch
 git -C research-rag status --short --branch
 git -C memory-rag status --short --branch
 git -C memory-ultra-rag-mcp-server status --short --branch
-git -C ui-ultra-rag-mcp status --short --branch
-git -C config-ultra-rag-mcp status --short --branch
 git diff --check
 ```
 

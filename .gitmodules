@@ -1,15 +1,6 @@
-[submodule "vanilla-ultra-rag-mcp-server"]
-	path = vanilla-ultra-rag-mcp-server
-	url = https://github.com/AhmedKishki/vanilla-ultra-rag-mcp-server.git
-[submodule "ui-ultra-rag-mcp"]
-	path = ui-ultra-rag-mcp
-	url = https://github.com/AhmedKishki/ui-ultra-rag-mcp.git
 [submodule "memory-ultra-rag-mcp-server"]
 	path = memory-ultra-rag-mcp-server
 	url = https://github.com/AhmedKishki/memory-ultra-rag-mcp-server.git
-[submodule "config-ultra-rag-mcp"]
-	path = config-ultra-rag-mcp
-	url = https://github.com/AhmedKishki/config-ultra-rag-mcp.git
 [submodule "research-rag"]
 	path = research-rag
 	url = https://github.com/AhmedKishki/research-rag.git
