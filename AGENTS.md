@@ -1,12 +1,11 @@
 # AGENTS.md
 
-The working rules of this collection: what a change here has to be argued against, and what each frozen product means for the projects beside it.
+The working rules of this collection: what a change here has to be argued against, and what the frozen product means for the projects beside it.
 
 This is a collection repository. Its server implementations, its research app, and its shared libraries are Git submodules and independent projects:
 
 - `vanilla-ultra-rag-mcp-server/`
-- `research-ultra-rag-mcp-server/` — frozen; see "The frozen research server" below
-- `research-rag/` — the form to install for the research knowledge base, and the only one of the two that changes
+- `research-rag/` — the form to install for the research knowledge base, and the only research product here
 - `memory-ultra-rag-mcp-server/` — frozen; see "The frozen memory server" below
 - `memory-rag/` — the form to install for the account's memory, and the only one of the two that changes
 - `ui-ultra-rag-mcp/`
@@ -48,11 +47,8 @@ This is a collection repository. Its server implementations, its research app, a
   - It is one process for the account rather than one per project, because a memory has a scope every project shares.
   - A command center that had to be visited once per repository would not be a central place for anything.
 
-### Where two products share state
+### Where two memory products share state
 
-- `research-rag` and the frozen `research-ultra-rag-mcp-server` read and write the same project layout.
-  - The shared layout, the shared settings directory, and the shared model cache are deliberate and pinned in the app's own `AGENTS.md`.
-  - Two products serving one project must never signal each other's processes, and each generates its launcher under its own name.
 - `memory-rag` and the frozen `memory-ultra-rag-mcp-server` read and write the same memory directories.
   - The settings directory, the environment prefix, the model cache, and the scope directory names are shared deliberately.
   - The frozen product holds no user dimension, and neither product adds one.
@@ -66,21 +62,6 @@ This is a collection repository. Its server implementations, its research app, a
   - Push the child repository first, then the pointer here, in two commands rather than one batch at the end.
 - Do not edit `.gitmodules` casually.
   - The canonical child remotes are the AhmedKishki GitHub repositories named above.
-
-## The frozen research server
-
-`research-ultra-rag-mcp-server` is frozen: no change is made to it, and none is planned. It stays in this collection as a submodule because the machines that run it read and write the same `.research-rag` projects the app reads and writes, so a project those machines still open is a project the app must not make unreadable.
-
-- Never open a change, a branch, or a pull request against it.
-  - A fix a reader needs goes into `research-rag`.
-- Never bump its pinned submodule commit.
-  - Its pointer is frozen at the revision that shipped, because moving it is a change to a product that is not changing.
-- Never change the shared on-disk layout to serve the app's own needs.
-  - A field or schema version the frozen product cannot parse is a project neither product can be trusted to read, and that is the fault class a stale checkout already caused once.
-  - Extend `project.json` additively, because that is the one portable file the frozen product reads a known subset of.
-  - Do not add a field to `source-metadata.json` or `source-catalog.json`, because the frozen product refuses a field it does not know.
-- Do not remove the submodule, and do not delete the repository.
-  - Keeping it is what makes a machine that runs both products work.
 
 ## The frozen memory server
 
@@ -112,7 +93,7 @@ git -C config-ultra-rag-mcp status --short --branch
 git diff --check
 ```
 
-Both frozen servers, `research-ultra-rag-mcp-server` and `memory-ultra-rag-mcp-server`, are deliberately absent from that list: their checkouts are expected to stay where they are, and `git submodule status` is the check that their pointers have not moved.
+The frozen server, `memory-ultra-rag-mcp-server`, is deliberately absent from that list: its checkout is expected to stay where it is, and `git submodule status` is the check that its pointer has not moved.
 
 Reading that output:
 

@@ -22,8 +22,6 @@ jobs:
           git submodule status --recursive
           test -f vanilla-ultra-rag-mcp-server/pyproject.toml
           test -f vanilla-ultra-rag-mcp-server/README.md
-          test -f research-ultra-rag-mcp-server/pyproject.toml
-          test -f research-ultra-rag-mcp-server/README.md
 
       - name: Check the collection scripts
         shell: bash
