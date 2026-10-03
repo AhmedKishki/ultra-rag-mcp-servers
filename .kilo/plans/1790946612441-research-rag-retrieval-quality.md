@@ -79,7 +79,42 @@ Keep CPU/offline operation and bounded inference; report the extra work each alg
   - Keep a future authored confirmation set unused during policy development.
   - Repeated latency runs require model warm-up, balanced execution order, and explicit cold/warm labels.
 
+### Decision sequence
+
+- Mechanical checks can run without new labels.
+  - Repeat the pinned baseline and compare ranking, stage, gate, and collapse fields while excluding explicitly named timing/path fields.
+  - Publish requested-to-observed budget mappings before interpreting any grid.
+  - Count designated-target losses at each stage with evaluated and unknown denominators.
+  - Inspect scored candidates removed by post-rerank collapse and retain discarded provenance.
+- Human evaluation gates policy acceptance, not diagnostic experimentation.
+  - Freeze a rubric separating relevance, usability, and evidence relation.
+  - Include verbatim copies, independent corroboration, contradictions, fragments, and author-confirmed no-answer questions.
+  - Blind arm names, ranks, and model scores when presenting annotation items.
+  - Keep per-query pool limits, truncation, input hashes, and adjudication reasons.
+  - A union pool provides pool-relative coverage, not exhaustive corpus recall.
+  - Re-present a declared subset to check annotation consistency; a repeated pass is not an independent annotator.
+- Predeclare the primary endpoint, practical improvement threshold, allowable regressions, and candidate selection rule before confirmation.
+  - Treat a large parameter sweep as hypothesis generation, not a collection of independent wins.
+  - Use paired inference at the connected question-family level; do not count related queries or result slots as independent samples.
+  - Choose confirmation-set size from the desired effect and uncertainty, not an arbitrary query-count guarantee.
+- Re-chunking requires stable source-span or section-level targets plus fresh usability judgments.
+  - Do not compare frozen chunk-ID scores across incompatible generations as though the target stayed fixed.
+- Latency decisions require a separate repeat protocol.
+  - Record cache state and background load; do not stop an existing app without authorization.
+  - Interleave candidate and baseline repetitions in balanced order.
+  - Separate cold startup from warm search and report sampling uncertainty rather than treating one small-sample p95 as stable.
+
 ### Evaluation and candidate policies
+
+- Use `research-rag/MEASUREMENTS.md` for the retained exploratory observations and their limits.
+- Prioritize the next comparisons by the stage evidence.
+  - Build a blinded author-graded pool for the baseline and selected retrieval-depth/rerank-window alternatives, holding one work limit fixed at a time.
+  - Include questions whose relevant evidence has weak lexical overlap and author-confirmed no-answer questions before comparing cosine admission with top-N admission.
+  - Audit retained collapse pairs for copy identity, independent corroboration, and contradictory claims before moving collapse ahead of reranking.
+  - Treat pre-rerank grouping as a conditional optimization; measure how many scores it can save at the intended work budget.
+  - Compare source-only selection with novelty selection using adjudicated evidence relations, not source count or cross-query repetition alone.
+  - Schedule extraction and chunk-boundary trials only after stable span targets and boundary/usability grades exist.
+  - Preserve current defaults until the confirmation protocol passes.
 
 1. **Make the measurement distinguish relevance, usability, and redundancy.**
    - Extend `scripts/evaluate_retrieval.py` without silently changing the existing known-item protocol.
