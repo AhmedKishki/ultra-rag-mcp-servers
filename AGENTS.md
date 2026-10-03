@@ -5,7 +5,6 @@ The working rules of this collection: what a change here has to be argued agains
 This is a collection repository. Its server implementations and its apps are Git submodules and independent projects:
 
 - `research-rag/` — the form to install for the research knowledge base, and the only research product here
-- `memory-ultra-rag-mcp-server/`
 - `memory-rag/` — the form to install for the account's memory
 
 ## Working rules
@@ -48,9 +47,9 @@ This is a collection repository. Its server implementations and its apps are Git
 
 ### Where two memory products share state
 
-- `memory-rag` and `memory-ultra-rag-mcp-server` read and write the same memory directories.
+- `memory-rag` shares its memory directories with `memory-ultra-rag-mcp-server`, which is retired from this collection but still installed on some machines.
   - The settings directory, the environment prefix, the model cache, and the scope directory names are shared deliberately.
-  - The server holds no user dimension, and neither product adds one.
+  - Neither product holds a user dimension, and a retired product does not gain one.
 
 ### How to record a change
 
@@ -70,7 +69,7 @@ This repository is the master repository for every project it holds. A member's 
   - A product installed on a machine is a reason to keep it installable, not a reason the master repository may not change it.
   - A defect in a member is fixed in that member, and the fix is pushed to that member's remote before the pointer here moves.
 - What binds is the state a live machine already holds.
-  - `memory-rag` and `memory-ultra-rag-mcp-server` read and write the same memory directories, so a change that would leave an existing memory unreadable is a change neither product may make.
+  - `memory-rag` and any installed `memory-ultra-rag-mcp-server` read and write the same memory directories, so a change that would leave an existing memory unreadable is a change neither product may make.
   - The account's settings directory, the `MEMORY_ULTRARAG_` environment prefix, the model cache, and the `memory/default` and `.memory-rag` directory names are found by name, and a rename strands every memory that exists under the old one.
   - `memory.sqlite3`'s columns are read by both products, so a column one cannot read is a memory it cannot serve.
   - `memory-rag`'s own `AGENTS.md` states each of those names as load-bearing, and its tests fail if any moves.
@@ -83,7 +82,6 @@ Before committing a collection change, run:
 git submodule status --recursive
 git -C research-rag status --short --branch
 git -C memory-rag status --short --branch
-git -C memory-ultra-rag-mcp-server status --short --branch
 git diff --check
 ```
 
@@ -100,4 +98,4 @@ Before changing a child that serves a project, check whether the app is up for i
   - It answers that nothing is running without starting one.
 - `memory-rag` does the same for an account rather than a project, and it is one process for every project rather than one each.
   - `memory-rag clients` answers with its address and the agents attached to it.
-  - Its writes reach the same records the memory server writes, so a hand edit made through the SQL panel is visible to a stdio client still running the server, and the reverse.
+  - Its writes reach the same records an installed `memory-ultra-rag-mcp-server` writes, so a hand edit made through the SQL panel is visible to a stdio client still running that server, and the reverse.

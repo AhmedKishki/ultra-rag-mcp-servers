@@ -22,7 +22,6 @@ jobs:
           git submodule status --recursive
           test -f research-rag/pyproject.toml
           test -f memory-rag/pyproject.toml
-          test -f memory-ultra-rag-mcp-server/pyproject.toml
 
       - name: Check the collection scripts
         shell: bash
