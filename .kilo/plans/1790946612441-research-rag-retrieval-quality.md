@@ -102,6 +102,12 @@ description: Define isolated fixed-model retrieval experiments, valid measuremen
   - Keep pending grades null and uncertain grades marked for adjudication; neither becomes a negative label.
   - Save returned judgments outside the frozen packet and verify them with `annotation check --require-complete`.
   - A completed annotation is not a quality result. Implement pooled scoring as a separate app-owned protocol without changing known-item definitions.
+  - Export only completed, acknowledged, adjudicated judgments using `annotation export`; unresolved labels and repeat disagreements block export.
+  - Score saved labels and retained rankings through the app's `scripts/evaluate_pooled.py`, directly or through `annotation score`; run no retrieval model during this scoring pass.
+  - Report graded nDCG, usable direct precision, and judged-pool coverage with denominators; never call pool-relative coverage exhaustive recall.
+  - Count only annotated returned-pair relations and disclose unjudged pairs; do not infer transitive evidence groups or absence of contradictions.
+  - Compare each trial separately against the baseline over the same evaluable queries within each frozen family.
+  - Conditional family-bootstrap intervals are exploratory, not acceptance, superiority, or equivalence tests; insufficient families or resamples leave intervals unknown.
 - Predeclare the primary endpoint, practical improvement threshold, allowable regressions, and candidate selection rule before confirmation.
   - Treat a large parameter sweep as hypothesis generation, not a collection of independent wins.
   - Use paired inference at the connected question-family level; do not count related queries or result slots as independent samples.
