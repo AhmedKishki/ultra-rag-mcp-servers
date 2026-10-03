@@ -105,4 +105,5 @@ scripts/stop-servers.sh --timeout 30         # seconds to wait before SIGKILL
 
 - It reports each process with its role (`ui`, `server`, `gateway`, or `ultrarag`) and its depth below the server that owns it.
 - It matches a product name only where a program can stand: the command itself, or the script a kernel ran after its interpreter, and a name that must be a file that is there and runnable. A product name in an editor's argument or a grep pattern is not a process.
+- `--project` selects on what the command line names. An app started by registered-project selection names no path, so it is reached by its own `stop` or by an unfiltered sweep.
 - It exits non-zero if anything survived.

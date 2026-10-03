@@ -129,7 +129,11 @@ project_of() {
       value="$(printf '%s' "$1" | sed -n 's#.*--workspace-root \([^ ]*\).*#\1#p')"
       printf '%s' "${value%/ultrarag-runtime}" | sed 's#/\.research-rag$##; s#/\.research-rag/.*##'
       return ;;
-    *"--project-name "*) printf '%s' "$1" | sed -n 's/.*--project-name \([^ ]*\).*/\1/p'; return ;;
+    *"--project-name "*)
+      # A project name is one value that may hold spaces, so it runs to the next
+      # option rather than to the next space.
+      printf '%s' "$1" | sed -n 's/^.*--project-name \(.*\)/\1/p' | sed 's/ --.*$//'
+      return ;;
   esac
   printf '-'
 }
