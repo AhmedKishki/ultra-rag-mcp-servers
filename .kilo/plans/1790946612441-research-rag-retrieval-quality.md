@@ -7,17 +7,19 @@ description: Define isolated fixed-model retrieval experiments, valid measuremen
 
 ## Scope
 
-Keep the current BGE-small embedding model and MiniLM reranker, their revisions, and their weights.
-All inference stays local; no larger model, added neural model, hosted API, fine-tuning, or model download is in scope.
+- Keep the current BGE-small embedding model and MiniLM reranker, their revisions, and their weights.
+- All inference stays local; no larger model, added neural model, hosted API, fine-tuning, or model download is in scope.
 - Repair the experiment harness and evaluation machinery, and reevaluate the experimental sequence.
 - Test candidate policies in disposable project/code copies.
 - Do not change shipped retrieval defaults or activate a live generation without a separate reviewed choice.
-Suppress copied text and overlapping evidence at search time, never during ingestion.
-Preserve independent arguments and contradictory claims; aggressive cross-source semantic collapsing is outside the selected design.
+- Suppress copied text and overlapping evidence at search time, never during ingestion.
+- Preserve independent arguments and contradictory claims.
+  - Aggressive cross-source semantic collapsing is outside the selected design.
 
-Keep the existing project-local generation boundary, original-file quote authority, reviewed overlays, and single service shared by all surfaces.
-Do not patch UltraRAG, depend on a sibling project, delete sources, or introduce answer generation.
-Keep CPU/offline operation and bounded inference; report the extra work each algorithm requires.
+- Preserve the research contract in `research-rag/AGENTS.md`: project-local generations, original-file quote authority, reviewed overlays, and one service shared by all surfaces.
+- Do not patch UltraRAG, depend on a sibling project, delete sources, or introduce answer generation.
+- Keep CPU/offline operation and bounded inference.
+  - Report the extra work each algorithm requires.
 
 ## Evidence establishing the baseline
 
@@ -39,7 +41,7 @@ Keep CPU/offline operation and bounded inference; report the extra work each alg
 - Pooled relevance, passage usability, counterevidence, and no-answer judgments are absent.
 - The artifact/model audit starts no app and runs no ingestion or official benchmark.
 
-- Implementation owners: `research-rag/src/research_rag/retrieval/search.py`, `retrieval/ultrarag.py`, `project/support.py`, `corpus/extraction.py`, and `core/tool_views.py`.
+- Implementation owners under `research-rag/src/research_rag/`: `retrieval/search.py`, `retrieval/dense.py`, `retrieval/ultrarag.py`, `project/support.py`, `corpus/extraction.py`, and `core/tool_views.py`.
 - Measurement contract: `research-rag/evaluation/README.md` and `research-rag/scripts/evaluate_retrieval.py`.
 - Experiment isolation and retained run records: the standalone `research-rag-experiments` repository.
 
@@ -93,6 +95,13 @@ Keep CPU/offline operation and bounded inference; report the extra work each alg
   - Keep per-query pool limits, truncation, input hashes, and adjudication reasons.
   - A union pool provides pool-relative coverage, not exhaustive corpus recall.
   - Re-present a declared subset to check annotation consistency; a repeated pass is not an independent annotator.
+  - Use the toolkit's `annotation build` workflow to prepare an arm-blinded private reviewer packet from verified retained evidence.
+  - Preserve candidate unions, missed designated passages, and selected collapse-pair endpoints without assigning grades.
+  - Keep arm/rank/score mappings and consistency aliases in `private/`; the offline `reviewer/` page contains questions, passages, source context, and original copies only.
+  - The author acknowledges the frozen proposed rubric and supplies relevance, usability, source-check, and relation judgments.
+  - Keep pending grades null and uncertain grades marked for adjudication; neither becomes a negative label.
+  - Save returned judgments outside the frozen packet and verify them with `annotation check --require-complete`.
+  - A completed annotation is not a quality result. Implement pooled scoring as a separate app-owned protocol without changing known-item definitions.
 - Predeclare the primary endpoint, practical improvement threshold, allowable regressions, and candidate selection rule before confirmation.
   - Treat a large parameter sweep as hypothesis generation, not a collection of independent wins.
   - Use paired inference at the connected question-family level; do not count related queries or result slots as independent samples.
@@ -117,20 +126,22 @@ Keep CPU/offline operation and bounded inference; report the extra work each alg
   - Preserve current defaults until the confirmation protocol passes.
 
 1. **Make the measurement distinguish relevance, usability, and redundancy.**
-   - Extend `scripts/evaluate_retrieval.py` without silently changing the existing known-item protocol.
+   - Extend `scripts/evaluate_retrieval.py` with judged relevance, usability, and evidence-relation metrics.
+     - Existing lexical repetition diagnostics in `research-rag/evaluation/README.md` do not supply those judgments.
+     - Preserve the known-item protocol.
    - Record effective settings, engine revision, generation, chunking/model fingerprints, candidate windows, gate rejections, collapsed alternatives, and final selection.
    - Keep private judgments and passage samples outside tracked source files and do not upload them to external evaluators.
-    - Build a private annotation pool from baseline and candidate results plus known missed targets, identified by source-relative path, locator, and content.
-    - Have the author grade relevance and usability; do not invent human judgments from cosine, overlap, or result rank.
+   - Build a private annotation pool from baseline and candidate results plus known missed targets, identified by source-relative path, locator, and content.
+   - Have the author grade relevance and usability; do not invent human judgments from cosine, overlap, or result rank.
    - Label copied/reprinted evidence separately from related arguments, contradictions, and independent corroboration.
    - Add unusable fragments, full bibliography entries, headings, captions, short legitimate prose, no-answer questions, and user-authored paraphrases.
-    - Split new development and untouched confirmation queries by target/question family; quote/paraphrase pairs stay together.
-    - Label partitions of the current inspected benchmark exploratory and declare only each partition's queried targets.
+   - Split new development and untouched confirmation queries by target/question family; quote/paraphrase pairs stay together.
+   - Label partitions of the current inspected benchmark exploratory and declare only each partition's queried targets.
    - Preserve ambiguity refusal; unresolved or excluded targets require explicit adjudication, not silent skips.
    - Report candidate recall before/after gates, usable-passage precision, unique-evidence coverage, redundancy, false suppression, boundary integrity, and p50/p95 latency.
    - Plot cosine and rerank-score distributions for positives, hard negatives, and no-answer queries; do not infer confidence from per-query min-max scores.
-    - Keep this work open until relevance, usability, counterevidence, and no-answer judgments support the acceptance tests.
-    - Reason: one designated chunk cannot fairly score re-chunking, equivalent passages, or deduplication.
+   - Keep this work open until relevance, usability, counterevidence, and no-answer judgments support the acceptance tests.
+     - One designated chunk cannot fairly score re-chunking, equivalent passages, or deduplication.
 
 2. **Prototype query-time quality and redundancy selection on unchanged artifacts.**
    - Work in `retrieval/search.py`, `project/support.py`, and the corresponding retrieval/core tests.
@@ -139,9 +150,9 @@ Keep CPU/offline operation and bounded inference; report the extra work each alg
    - Compare retrieval depths 40/80/160 and rerank budgets 20/30/50; these are test settings, not new defaults.
    - Keep lexical-only and dense-only evidence represented inside the bounded rerank pool; log the branch contribution.
    - Widen after quality/exclusion/repetition losses and score new candidates within the total rerank budget; disclose ceiling and budget exhaustion separately.
-    - Group high-confidence same-text copies before spending the rerank budget, retaining every source/locator as an alternative.
-    - First measure how many scored candidates the existing post-rerank collapse discards and which target/evidence alternatives it removes.
-    - Do not reject this experiment because final result lists contain few duplicates; those lists already follow repetition collapse.
+   - Group high-confidence same-text copies before spending the rerank budget, retaining every source/locator as an alternative.
+     - First measure how many scored candidates post-rerank collapse discards and which target/evidence alternatives it removes.
+     - Final result lists already follow repetition collapse; few final duplicates do not establish low rerank waste.
    - Preserve a representative that passes the query's filters and explicit exclusions; an excluded copy must not suppress an allowed copy.
    - Compare the source-only penalty with content-based MMR: `lambda * relevance - (1-lambda) * max_redundancy_to_selected`.
    - Combine body-vector similarity with word-shingle Jaccard/containment and known span overlap; exact shingle sets suffice for the bounded candidate pool.
