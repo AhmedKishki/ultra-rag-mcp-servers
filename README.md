@@ -83,18 +83,18 @@ git push
 
 ## Stop stray server processes
 
-A stdio MCP server belongs to the client that started it, so it cannot be reloaded or stopped from here: the client owns that process. The retired stdio memory server and the vanilla gateway it owned are the reason `scripts/stop-servers.sh` exists, and each of them started its children in its own session, so a process-group kill from a launcher cannot reach them.
+A stdio MCP server belongs to the client that started it, so it cannot be reloaded or stopped from here: the client owns that process. The retired stdio memory server and the vanilla gateway it owned are the reason `scripts/stop-servers.sh` exists, and each of them started its children in its own session, so a process-group kill from a launcher cannot reach them. A client reload leaves that whole family behind.
 
-The two apps are stopped from their own terminal instead, and each one records what it owns:
+The two apps are stopped from their own terminal, and each one records what it owns:
 
 ```bash
 research-rag --project-root /path/to/project stop
 memory-rag stop
 ```
 
-Closing the terminal that started an app stops it as well.
+Closing the terminal that started an app stops it as well. `stop` is therefore per product and per project, and it is the answer for a machine that is being worked on normally. It is not the answer for a machine whose client has reloaded and left a family behind, so `scripts/stop-servers.sh` still covers every product in this collection, the retired one included.
 
-`scripts/stop-servers.sh` remains for a machine still running the retired server. It identifies those processes by their own entry points, walks each family down to the UltraRAG children, and stops them by explicit PID — `SIGTERM` first, `SIGKILL` only for what ignores it. It never uses a pattern kill.
+`scripts/stop-servers.sh` identifies those processes by the program each one runs, walks each family down to the UltraRAG children, and stops them by explicit PID — `SIGTERM` first, `SIGKILL` only for what ignores it. It never uses a pattern kill.
 
 ```bash
 scripts/stop-servers.sh --dry-run            # list what it would stop
@@ -103,6 +103,6 @@ scripts/stop-servers.sh --project /path/to/project
 scripts/stop-servers.sh --timeout 30         # seconds to wait before SIGKILL
 ```
 
-- It reports each process with its role (`ui`, `server`, `gateway`, `ultrarag`, `verify`) and its depth below the server that owns it.
+- It reports each process with its role (`ui`, `server`, `gateway`, or `ultrarag`) and its depth below the server that owns it.
+- It matches a product name only where a program can stand: the command itself, or the script a kernel ran after its interpreter, and a name that must be a file that is there and runnable. A product name in an editor's argument or a grep pattern is not a process.
 - It exits non-zero if anything survived.
-- It recognises the retired servers' entry points only, not the current apps; [`TODO.md`](TODO.md) carries the decision on what replaces it.

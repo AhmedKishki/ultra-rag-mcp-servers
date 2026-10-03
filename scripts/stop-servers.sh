@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Stop every UltraRAG MCP server, browser UI, gateway, and UltraRAG child that
-# was started from a server in this collection.
+# Stop every app, stdio server, gateway, and UltraRAG child that this collection's
+# projects started, across every project.
 #
 #   scripts/stop-servers.sh                    stop everything it recognises
 #   scripts/stop-servers.sh --dry-run          list what it would stop
@@ -8,14 +8,14 @@
 #   scripts/stop-servers.sh --timeout SECONDS  wait before SIGKILL (default 10)
 #
 # Why this exists: a stdio MCP server belongs to the client that started it, so a
-# client reload can leave a server behind, and each server owns a vanilla gateway
-# and, through it, UltraRAG's corpus and retriever children. Every stdio child is
-# also started in its own session, so a process-group kill from a launcher cannot
-# reach it.
+# client reload can leave a server behind, and a project with no terminal holding
+# it can leave an app behind too. `research-rag` owns a gateway and, through it,
+# UltraRAG's corpus and retriever children. Every stdio child is also started in
+# its own session, so a process-group kill from a launcher cannot reach it.
 #
 # This script identifies those processes by their own entry points, walks each
 # family, and stops it by explicit PID: SIGTERM first, SIGKILL only for what
-# ignores it. It never uses a pattern kill, which is the rule each server's own
+# ignores it. It never uses a pattern kill, which is the rule each app's own
 # documentation states for stopping a running server.
 set -uo pipefail
 
@@ -24,7 +24,7 @@ PROJECT=""
 TIMEOUT=10
 
 usage() {
-  sed -n '2,18p' "$0" | sed -e 's/^# \{0,1\}//'
+  sed -n '2,19p' "$0" | sed -e 's/^# \{0,1\}//'
 }
 
 while [ "$#" -gt 0 ]; do
@@ -49,31 +49,59 @@ if [ -n "$PROJECT" ]; then
   }
 fi
 
-# Console scripts, module invocations, and the UltraRAG children the vanilla
-# gateway starts from its managed runtime cache.
-SCRIPT_PATTERN='(^|/)(research-ultra-rag-mcp|research-ultra-rag-ui|research-ultra-rag-verify|vanilla-ultra-rag-mcp|vanilla-ultra-rag-ui|vanilla-ultra-rag-runtime|memory-ultra-rag-mcp|memory-ultra-rag-ui|graph-memory-ultra-rag-mcp)([[:space:]]|$)'
-MODULE_PATTERN='-m (research_ultra_rag_mcp|vanilla_ultra_rag_mcp|memory_ultra_rag_mcp|graph_memory_ultra_rag_mcp)([[:space:]]|$)'
+# The programs this collection installs, as the program a process runs: a console
+# script passes its own path, and `python -m <module>` passes the module name.
+# The name is matched against one argument's basename and never against the
+# command line as a whole, because a project's own directory carries the product
+# name in it and that is a value rather than a program.
+PROGRAM_NAMES='research-rag research-rag-gateway memory-rag memory-ultra-rag-mcp memory-ultra-rag-ui'
+MODULE_NAMES='research_rag memory_ultra_rag_mcp'
+# The UltraRAG children the gateway starts from its managed runtime cache, named by
+# the cache path that holds them.
 ULTRARAG_PATTERN='vanilla-ultra-rag-mcp/runtime/.*/(corpus|retriever)\.py'
+
+is_name() {
+  # $1 is a space-separated list of names, $2 the word to test against it.
+  local name
+  for name in $1; do
+    [ "$name" = "$2" ] && return 0
+  done
+  return 1
+}
+
+is_program() {
+  # $1 is the token, $2 its position in the command. A product name is the
+  # program only where a program can stand: argv[0], or the console script a
+  # kernel ran after its interpreter. Anywhere else it is text — a pattern, an
+  # option value, a path — so the token must also be a file that is there and
+  # runnable, which a bare name in someone's working directory is not.
+  is_name "$PROGRAM_NAMES" "${1##*/}" || return 1
+  [ "$2" -eq 0 ] && return 0
+  [ -f "$1" ] && [ -x "$1" ]
+}
 
 is_server() {
   case "$1" in *stop-servers.sh*) return 1 ;; esac
-  printf '%s' "$1" | grep -Eq -e "$SCRIPT_PATTERN" && return 0
-  printf '%s' "$1" | grep -Eq -e "$MODULE_PATTERN" && return 0
-  printf '%s' "$1" | grep -Eq -e "$ULTRARAG_PATTERN" && return 0
+  local token previous="" index=0
+  for token in $1; do
+    [ "$previous" = "-m" ] && is_name "$MODULE_NAMES" "$token" && return 0
+    is_program "$token" "$index" && return 0
+    printf '%s' "$token" | grep -Eq -e "$ULTRARAG_PATTERN" && return 0
+    previous="$token"
+    index=$((index + 1))
+  done
   return 1
 }
 
 role_of() {
-  # Only the command head identifies the process: a private server carries
-  # --vanilla-executable <path>, so matching the whole command line would call it
-  # a gateway.
+  # Only the command head identifies the process, and the head is the tokens up to
+  # the first option: a project path is a value, not the program.
   local head
   head="$(head_of "$1")"
   case "$head" in
     *"vanilla-ultra-rag-mcp/runtime/"*) printf 'ultrarag' ;;
-    *research-ultra-rag-ui*|*memory-ultra-rag-ui*|*vanilla-ultra-rag-ui*) printf 'ui' ;;
-    *research-ultra-rag-verify*) printf 'verify' ;;
-    *vanilla-ultra-rag-mcp*|*vanilla_ultra_rag_mcp*) printf 'gateway' ;;
+    *research-rag-gateway*) printf 'gateway' ;;
+    *memory-ultra-rag-ui*) printf 'ui' ;;
     *) printf 'server' ;;
   esac
 }
@@ -90,12 +118,18 @@ head_of() {
 }
 
 project_of() {
+  local value
   case "$1" in
     *"--project-root "*)
       printf '%s' "$1" | sed -n 's/.*--project-root \([^ ]*\).*/\1/p'; return ;;
     *"--workspace-root "*)
-      printf '%s' "$1" | sed -n 's#.*--workspace-root \([^ ]*\).*#\1#p' \
-        | sed 's#/\.research-rag/.*##'; return ;;
+      # The gateway's workspace is the project's state directory, which carries
+      # the project root in front of `.research-rag` unless the state was
+      # relocated with --runtime-root, and then only the relocated path is here.
+      value="$(printf '%s' "$1" | sed -n 's#.*--workspace-root \([^ ]*\).*#\1#p')"
+      printf '%s' "${value%/ultrarag-runtime}" | sed 's#/\.research-rag$##; s#/\.research-rag/.*##'
+      return ;;
+    *"--project-name "*) printf '%s' "$1" | sed -n 's/.*--project-name \([^ ]*\).*/\1/p'; return ;;
   esac
   printf '-'
 }

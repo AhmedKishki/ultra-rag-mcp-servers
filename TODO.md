@@ -16,13 +16,6 @@ Each entry follows the member rules in the collection's `AGENTS.md`, and that fi
 - **Why it is not a shared dependency:** two app products depending on each other would make every change to one a change to the other, and a member may depend on a pinned sibling library or on nothing.
 - **The reference implementation:** `research-rag`, whose `AGENTS.md` states the lifecycle as a rule and whose `TODO.md` carries the command centre still to build.
 
-### Decide what replaces the process sweep
-
-- **Status:** not started; `scripts/stop-servers.sh` still recognises the retired stdio servers only.
-- **Why it is open:** with the stdio memory server retired, the sweep has no member left to stop. Each app records its own process and is stopped from its own terminal, so the script's original reason is gone.
-- **The decision to make:** whether the script is extended to the current app entry points, narrowed to the retired server it still cleans up, or deleted once no machine needs it.
-- **Constraint either way:** an app may not be stopped by a pattern kill, and a sweep may not signal a process it cannot attribute to a member.
-
 ---
 
 ## Graph memory server
