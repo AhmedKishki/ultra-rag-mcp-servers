@@ -24,3 +24,14 @@
 mcp_settings.json
 *.pdf
 *.epub
+
+# Superseded upstream clones.
+#
+# The vanilla gateway, the shared browser view, and the settings layer were once
+# cloned beside the members here. Each app carries its own copy of the code it
+# used, so these three are no longer collection members, and a member enters this
+# repository through `.gitmodules` rather than as a working copy. They are listed
+# so a fresh clone of one does not return untracked to every future status.
+/vanilla-ultra-rag-mcp-server/
+/ui-ultra-rag-mcp/
+/config-ultra-rag-mcp/
