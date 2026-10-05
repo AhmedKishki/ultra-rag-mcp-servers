@@ -34,6 +34,13 @@ description: Compare the included UltraRAG projects and manage their pinned repo
 - Each project's README owns its installation, configuration, commands, and limits.
 - Unimplemented server concepts belong in [`TODO.md`](TODO.md).
 
+### The retired stdio memory server
+
+- `memory-ultra-rag-mcp-server` is no longer a member; `memory-rag` supersedes it.
+  - Its repository is kept and stays installable, so a machine that still runs it keeps working.
+  - Both read and write the same account records, so a memory the retired server wrote stays readable by `memory-rag`.
+  - `memory-rag` states the storage names it keeps and pins them in its own tests.
+
 ### Comparison outside the collection
 
 - [`mcp-rag-server`](https://github.com/kwanLeeFrmVi/mcp-rag-server) is a separate project for text, Markdown, JSON, JSONL, and CSV context retrieval.
