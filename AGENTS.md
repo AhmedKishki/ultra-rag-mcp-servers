@@ -13,6 +13,9 @@ description: Collection boundaries, compatibility rules, and validation for chan
 - Read a child's `AGENTS.md` before changing it.
 - Keep the parent limited to collection documentation, automation, and submodule references.
   - Do not copy child source into the parent or couple release histories.
+- The parent is the collection's shared development environment.
+  - One checkout holds every member's working tree, and `scripts/` holds the automation that spans them.
+  - Each member keeps its own environment, tests, and releases; the parent runs none of them.
 - Members may be changed, added, retired, or archived here.
   - No member's code is frozen because an installed machine runs it.
   - Preserve the state those machines already hold.
@@ -43,16 +46,11 @@ description: Collection boundaries, compatibility rules, and validation for chan
 - These rules apply equally to both apps.
 - `research-rag` serves one process per project; `memory-rag` serves one per account.
 
-## Shared memory compatibility
+## Stored state on installed machines
 
-- `memory-rag` reads and writes records the retired stdio server also wrote.
-  - Neither product adds a user dimension.
-- Preserve existing settings and storage names:
-  - The account's settings directory, `MEMORY_ULTRARAG_` environment prefix, and model cache.
-  - The `memory/default` and `.memory-rag` scope directories.
-  - The shared columns of `memory.sqlite3`.
-- A change must leave memory written by the retired server readable.
-  - The child guidance and compatibility tests hold the detailed contract.
+- A member may not rename a path, a column, or a setting an installed machine already holds.
+  - The child states the names it keeps and its own tests pin them; `memory-rag` does this in `AGENTS.md` and `STORAGE.md` with `tests/test_compatibility.py`.
+  - Do not restate a child's names here. The child is the only owner of them.
 
 ## Recording changes
 
@@ -72,7 +70,6 @@ description: Collection boundaries, compatibility rules, and validation for chan
   memory-rag clients
   ```
 
-- The memory app's SQL writes and the retired stdio server's writes reached the same records.
 - Before committing a collection change, run:
 
   ```bash

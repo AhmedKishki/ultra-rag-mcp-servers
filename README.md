@@ -5,7 +5,9 @@ description: Compare the included UltraRAG projects and manage their pinned repo
 
 # UltraRAG MCP servers
 
-- Independent apps and MCP servers, included as Git submodules at specific commits.
+- Two independent apps, included as Git submodules at specific commits.
+- This repository is their shared development environment: one checkout holds both working trees, and [`scripts/`](scripts/) holds the automation that spans them.
+  - Each app keeps its own environment, tests, and releases.
 
 ## Credit to UltraRAG
 
@@ -92,7 +94,7 @@ description: Compare the included UltraRAG projects and manage their pinned repo
 
 - Prefer an app's own `stop` command or disconnect a server from its MCP client.
 - `scripts/stop-servers.sh` is a Linux cleanup tool for recognized app, server, gateway, and UltraRAG processes.
-  - It still recognizes the retired stdio memory server, because machines that still install it keep running it.
+  - It recognizes this collection's console scripts, including ones from earlier revisions that no current member installs, so a machine still running one is cleaned up too.
   - Signaling requires Python 3.9 or newer and Linux 5.3 or newer with usable pidfds.
   - Without a signal handle it leaves the process alone and exits with code 3.
   - Inspect the dry run before stopping anything.

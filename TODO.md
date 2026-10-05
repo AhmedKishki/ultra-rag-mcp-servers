@@ -1,31 +1,16 @@
 ---
 name: TODO.md
-description: Open collection work and server concepts that are not available to install.
+description: Open work the collection owns, and server concepts that are not available to install.
 ---
 
 # Open work and server concepts
 
 - All entries follow the member rules in [`AGENTS.md`](AGENTS.md).
+- This file holds work the collection itself owns. Work inside a member belongs in that member's own `TODO.md`.
 
-## Open collection work
+## The shared development environment
 
-### One lifecycle for the app products
-
-- Align `memory-rag` with the terminal-attached lifecycle in `research-rag/AGENTS.md`.
-  - Open a browser only when requested.
-  - Support project selection in the workspace.
-  - Implement controls in each app's own workspace and adapter, not a shared dependency.
-- Related command-center work belongs in `research-rag/TODO.md`.
-
-## Graph memory server
-
-- Deferred while its type system and local/global boundary remain unsettled.
-- Proposed model: objects, addressable relations, and atomic statements, based on the MCP reference memory server and reimplemented in Python.
-  - A project-declared schema in `project-types.json`, seeded with a canonical vocabulary.
-  - Reversible withdrawal and exact-duplicate refusal with a reasoned override.
-  - One global store per user and explicit `scope` for promotion.
-- `memory-rag` remains the installable memory product.
-  - Keep this concept separate from changes to the existing memory product.
+- [ ] **Prepare both members' environments from the collection root.** Feature. A recursive clone gives two working trees and two environments to create by hand, and nothing records the interpreter each member is tested against. One command that syncs and verifies each member's environment turns the collection into a development environment rather than a directory of checkouts.
 
 ## Embedded C development server
 
