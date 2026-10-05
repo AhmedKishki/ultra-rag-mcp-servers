@@ -1,103 +1,86 @@
-# AGENTS.md
+---
+name: AGENTS.md
+description: Collection boundaries, compatibility rules, and validation for changes across the child repositories.
+---
 
-The working rules of this collection: what a change here has to be argued against, and what this repository owes the machines that already run what it holds.
+# Collection rules
 
-This is a collection repository. Its server implementations and its apps are Git submodules and independent projects:
+## Scope
 
-- `research-rag/` — the form to install for the research knowledge base, and the only research product here
-- `memory-ultra-rag-mcp-server/`
-- `memory-rag/` — the form to install for the account's memory
+- This repository holds two independently versioned Git submodules:
+  - `research-rag/`: the research app and the collection's only research product.
+  - `memory-rag/`: the account-wide memory app.
+- Read a child's `AGENTS.md` before changing it.
+- Keep the parent limited to collection documentation, automation, and submodule references.
+  - Do not copy child source into the parent or couple release histories.
+- Members may be changed, added, retired, or archived here.
+  - No member's code is frozen because an installed machine runs it.
+  - Preserve the state those machines already hold.
+  - A retired member keeps its own repository and stays installable.
+    - Its records stay readable by the product that replaced it.
 
-## Working rules
+## Documentation
 
-### How to write
+- Write direct, concise sentences with one fact each.
+  - Cut filler, sales language, and repetition of a heading.
+- Preserve the prominent UltraRAG credit in `README.md`, `NOTICE`, upstream links, license information, and independent-project disclaimer.
+  - Never imply upstream endorsement.
+- Markdown describes current rules and capabilities; Git holds completed work.
+- Keep comparisons and selection guidance in the parent `README.md`.
+  - Child READMEs stand alone and describe only their project.
+- Keep unimplemented server concepts in the root `TODO.md`.
+  - List a server in `README.md` only after its repository exists and is included.
+  - Child roadmaps cover only work within that child's role.
 
-- Write every file — documents, commit messages, code comments — in direct, concise language.
-  - One sentence per fact, no filler, no selling, and never restate a title as its own first sentence.
-- Retain the prominent UltraRAG acknowledgement in `README.md`, the root `NOTICE`, upstream project links, license information, and independent-project disclaimer.
-  - Do not imply upstream endorsement.
-- Markdown describes the present.
-  - A finished item leaves no trace except the code and the commit.
+## Independence
 
-### Where a fact belongs
+- Every existing or planned member must own its installation, README, agent guidance, storage boundary, tests, and release history.
+- No member may depend on a sibling server or its private state.
+- Members must not depend on another project by this collection's author to do their work.
+  - Each app carries the workspace, settings layer, and gateway it needs.
+  - Local copies of workspace and settings code are deliberate.
+  - Carry a fix to every member holding the affected code.
+- These rules apply equally to both apps.
+- `research-rag` serves one process per project; `memory-rag` serves one per account.
 
-- Read the selected submodule's own `AGENTS.md` before changing its code.
-- Keep cross-project comparisons and selection guidance in the parent `README.md`.
-  - Each child `README.md` must stand alone and document only that project.
-- Keep deferred, unimplemented server concepts in the collection-root `TODO.md`.
-  - List a server in `README.md` only after its repository has been created and included here.
-  - Child roadmaps may cover deferred work only within that child's existing role, not concepts for new servers.
-- Do not duplicate child source files in the parent or couple their release histories.
-  - Keep the parent limited to collection-level documentation, automation, and pinned submodule references.
+## Shared memory compatibility
 
-### What a member must be
+- `memory-rag` reads and writes records the retired stdio server also wrote.
+  - Neither product adds a user dimension.
+- Preserve existing settings and storage names:
+  - The account's settings directory, `MEMORY_ULTRARAG_` environment prefix, and model cache.
+  - The `memory/default` and `.memory-rag` scope directories.
+  - The shared columns of `memory.sqlite3`.
+- A change must leave memory written by the retired server readable.
+  - The child guidance and compatibility tests hold the detailed contract.
 
-- Every server, including planned servers, must be an independently installable, self-contained project.
-  - Its own README, agent guidance, storage boundary, tests, and release history.
-  - Do not make one specialized server depend on a sibling server or its private state.
-- No member depends on another project of this collection's author to do its work.
-  - The workspace, the settings layer, and the vanilla gateway were shared libraries, and each app that needs one carries its own copy.
-  - Two copies of the workspace and the settings layer is duplication this repository accepts, because a pinned dependency is a fix this repository cannot make and cannot ship.
-  - A change that belongs in one member is made in that member, and where another member carries the same code it is carried there too.
-- `research-rag` is an app, not a collection member that is exempt from these rules.
-  - It is a server product with a browser workspace and a command line beside its agent surface, and it holds the same obligations as every other member.
-  - It has no dependency on a sibling's private state.
-- `memory-rag` is an app, and it holds the same obligations as `research-rag`.
-  - It is one process for the account rather than one per project, because a memory has a scope every project shares.
-  - A command center that had to be visited once per repository would not be a central place for anything.
+## Recording changes
 
-### Where two memory products share state
-
-- `memory-rag` and `memory-ultra-rag-mcp-server` read and write the same memory directories.
-  - The settings directory, the environment prefix, the model cache, and the scope directory names are shared deliberately.
-  - The server holds no user dimension, and neither product adds one.
-
-### How to record a change
-
-- Make, test, commit, and push implementation changes inside the child repository first.
-- Update a submodule pointer here only after its referenced commit is available from the child's remote repository.
-- Commit and push after every change, without waiting to be asked.
-  - A change that is not on its remote is a change that is lost, and it is this repository's only record.
-  - Push the child repository first, then the pointer here, in two commands rather than one batch at the end.
-- Do not edit `.gitmodules` casually.
-  - The canonical child remotes are the AhmedKishki GitHub repositories named above.
-
-## What this repository may do with a member
-
-This repository is the master repository for every project it holds. A member's code, tests, documentation, and releases are changed here, run here, and debugged here, and a member is added, retired, or archived as the work requires.
-
-- No member is frozen, and no pointer is held at a revision for the sake of holding it.
-  - A product installed on a machine is a reason to keep it installable, not a reason the master repository may not change it.
-  - A defect in a member is fixed in that member, and the fix is pushed to that member's remote before the pointer here moves.
-- What binds is the state a live machine already holds.
-  - `memory-rag` and `memory-ultra-rag-mcp-server` read and write the same memory directories, so a change that would leave an existing memory unreadable is a change neither product may make.
-  - The account's settings directory, the `MEMORY_ULTRARAG_` environment prefix, the model cache, and the `memory/default` and `.memory-rag` directory names are found by name, and a rename strands every memory that exists under the old one.
-  - `memory.sqlite3`'s columns are read by both products, so a column one cannot read is a memory it cannot serve.
-  - `memory-rag`'s own `AGENTS.md` states each of those names as load-bearing, and its tests fail if any moves.
+- Make, test, commit, and push a child's changes before updating its parent pointer.
+- Update a gitlink only after the referenced commit is available from the child's remote.
+- Commit and push after each change, without waiting to be asked.
+  - Push the child and then the parent in separate commands.
+- Change `.gitmodules` only for an intentional membership or remote change.
+  - Canonical child remotes are the matching AhmedKishki GitHub repositories.
 
 ## Validation
 
-Before committing a collection change, run:
+- Before changing an app, inspect its running instance without starting one:
 
-```bash
-git submodule status --recursive
-git -C research-rag status --short --branch
-git -C memory-rag status --short --branch
-git -C memory-ultra-rag-mcp-server status --short --branch
-git diff --check
-```
+  ```bash
+  research-rag --project-root <project> clients
+  memory-rag clients
+  ```
 
-Reading that output:
+- The memory app's SQL writes and the retired stdio server's writes reached the same records.
+- Before committing a collection change, run:
 
-- A leading `-` means a child is not initialized.
-- A leading `+` means the checked-out child commit differs from the commit recorded by the parent.
-- A submodule listed in `git submodule status` that is absent from this file was removed, and its entry in `.gitmodules` and its gitlink are gone with it.
+  ```bash
+  git submodule status --recursive
+  git -C research-rag status --short --branch
+  git -C memory-rag status --short --branch
+  git diff --check
+  ```
 
-Before changing a child that serves a project, check whether the app is up for it:
-
-- `research-rag` runs as a long-lived process on a loopback port, which a stdio server does not.
-  - `research-rag --project-root <project> clients` answers with the app's address and the agents attached to it.
-  - It answers that nothing is running without starting one.
-- `memory-rag` does the same for an account rather than a project, and it is one process for every project rather than one each.
-  - `memory-rag clients` answers with its address and the agents attached to it.
-  - Its writes reach the same records the memory server writes, so a hand edit made through the SQL panel is visible to a stdio client still running the server, and the reverse.
+- In submodule status, `-` means uninitialized and `+` means the checkout differs from the recorded commit.
+- When removing a member, remove both its `.gitmodules` entry and gitlink.

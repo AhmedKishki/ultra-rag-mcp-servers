@@ -22,10 +22,17 @@ jobs:
           git submodule status --recursive
           test -f research-rag/pyproject.toml
           test -f memory-rag/pyproject.toml
-          test -f memory-ultra-rag-mcp-server/pyproject.toml
 
       - name: Check the collection scripts
         shell: bash
         run: |
           bash -n scripts/stop-servers.sh
+          python3 -m py_compile scripts/collection_processes.py scripts/tests/test_stop_servers.py
           scripts/stop-servers.sh --dry-run
+
+      - name: Run the collection automation tests
+        shell: bash
+        run: |
+          python3 -m unittest discover \
+            --start-directory scripts/tests \
+            --top-level-directory scripts/tests

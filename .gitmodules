@@ -1,6 +1,3 @@
-[submodule "memory-ultra-rag-mcp-server"]
-	path = memory-ultra-rag-mcp-server
-	url = https://github.com/AhmedKishki/memory-ultra-rag-mcp-server.git
 [submodule "research-rag"]
 	path = research-rag
 	url = https://github.com/AhmedKishki/research-rag.git

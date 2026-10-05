@@ -24,3 +24,11 @@
 mcp_settings.json
 *.pdf
 *.epub
+
+# The retired stdio memory server.
+#
+# `memory-rag` superseded it, so it is no longer a collection member and its
+# gitlink is gone. Its repository is kept and remains installable for machines
+# that still run it, and a working copy of it stays here for the same reason.
+# A member enters this repository through `.gitmodules`, not as a working copy.
+/memory-ultra-rag-mcp-server/

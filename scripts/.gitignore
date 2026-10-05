@@ -1,0 +1,2 @@
+# The stop script and its tests are Python, and a test run writes bytecode here.
+__pycache__/

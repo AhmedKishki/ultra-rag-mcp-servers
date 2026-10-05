@@ -1,6 +1,6 @@
 UPSTREAM ATTRIBUTION
 
-rag-mcp-servers is a collection of independent MCP server projects built on UltraRAG plus a reusable companion UI library:
+ultra-rag-mcp-servers is a collection of independent apps and MCP servers built on UltraRAG's architecture and RAG foundations:
 
     UltraRAG
     https://github.com/OpenBMB/UltraRAG
@@ -19,7 +19,7 @@ UltraRAG supplies the MCP architecture, tools, prompts, pipeline design, chunkin
     https://github.com/OpenBMB/UltraRAG/blob/main/LICENSE.txt
     https://www.apache.org/licenses/LICENSE-2.0
 
-Each server submodule contains a version-specific NOTICE identifying the exact UltraRAG revision on which it depends and a suggested software citation. The UI submodule contains its own ecosystem acknowledgement and does not bundle an UltraRAG runtime.
+Each child repository contains a NOTICE with its upstream references, software citation, and dependency terms.
 
 INDEPENDENT PROJECT NOTICE
 
