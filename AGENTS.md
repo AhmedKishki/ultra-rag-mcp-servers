@@ -52,17 +52,26 @@ description: Collection boundaries, compatibility rules, and validation for chan
   - The child states the names it keeps and its own tests pin them; `memory-rag` does this in `AGENTS.md` and `STORAGE.md` with `tests/test_compatibility.py`.
   - Do not restate a child's names here. The child is the only owner of them.
 
+## Git reconciliation
+
+- Before starting any work, inspect Git status and run `git fetch` and `git pull --ff-only` in every repository you will change.
+- Reconcile local and remote state before proceeding.
+- If reconciliation is blocked by local changes or divergent history, stop and ask the user how to proceed.
+- Preserve unrelated local changes; never discard them to reconcile Git.
+
 ## Recording changes
 
 - Make, test, commit, and push a child's changes before updating its parent pointer.
 - Update a gitlink only after the referenced commit is available from the child's remote.
-- Commit and push after each change, without waiting to be asked.
+- Always commit and push each completed change after its validation succeeds, without waiting to be asked.
   - Push the child and then the parent in separate commands.
 - Change `.gitmodules` only for an intentional membership or remote change.
   - Canonical child remotes are the matching AhmedKishki GitHub repositories.
 
 ## Validation
 
+- Run only bounded tests relevant to the changes.
+- Running the full test suite requires explicit user approval.
 - Before changing an app, inspect its running instance without starting one:
 
   ```bash
