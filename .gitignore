@@ -25,6 +25,9 @@ mcp_settings.json
 *.pdf
 *.epub
 
+# Local learning guide.
+/GUIDE.md
+
 # Superseded upstream clones.
 #
 # The vanilla gateway, the shared browser view, and the settings layer were once
