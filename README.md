@@ -50,9 +50,8 @@ description: Compare the included UltraRAG projects and manage their pinned repo
 
 ## What each app owns
 
-- Each app carries its own workspace and settings-layer implementation.
-  - Carry shared fixes to both copies.
-- Only `research-rag` carries the gateway to UltraRAG's Vanilla RAG stages.
+- Each app owns its workspace and settings-layer code. The two share no code or files, and a change to one never requires a change to the other.
+- `research-rag` keeps only migration shims for its retired UltraRAG gateway commands.
 - `research-rag` pins an author-hosted `bm25s` fork for a non-ASCII stopword fix.
   - Its `AGENTS.md` states the condition for returning to upstream.
 

@@ -39,10 +39,10 @@ description: Collection boundaries, compatibility rules, and validation for chan
 
 - Every existing or planned member must own its installation, README, agent guidance, storage boundary, tests, and release history.
 - No member may depend on a sibling server or its private state.
+- Members share no code and no files.
+  - Each app owns its workspace and settings-layer code and changes it on its own.
+  - A change in one app never obliges a change in the other.
 - Members must not depend on another project by this collection's author to do their work.
-  - Each app carries the workspace, settings layer, and gateway it needs.
-  - Local copies of workspace and settings code are deliberate.
-  - Carry a fix to every member holding the affected code.
 - These rules apply equally to both apps.
 - `research-rag` serves one process per project; `memory-rag` serves one per account.
 
